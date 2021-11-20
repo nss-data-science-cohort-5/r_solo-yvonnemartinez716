@@ -39,22 +39,50 @@ districts.1 %>%
 
 5. Which district has the lowest graduation rate?
 ```{r}
-install.packages("data.table")
-library("data.table")
+
   
 ```
 
 ```{r}
-setDT(districts.1)[,.SD[which.min(grad)], by = system_name]
+#setDT(districts.1)[,?.SD[which.min(grad)], by = system_name]
+```
+```{r}
+districts.1 %>% 
+  slice_min(grad)
 ```
 
 6. Which district has the highest dropout rate?
+```{r}
+districts.1 %>% 
+  slice_max(dropout)
+```
+
 
 7. Within the Mid Cumberland region, which district has the highest ACT composite?
+```{r}
+districts.1 %>%
+  filter(region == "Mid Cumberland") %>% 
+  slice_max(act_composite)
+```
 
 8. Create a histogram showing the distribution of graduation rates. What can you say about this distribution?
+```{r}
+ggplot(districts.1,aes(x= grad))+
+  geom_histogram()
+```
 
 9. Create a scatter plot to compare alg_1 proficiency rates to alg_2 rates. What do you notice? Facet this plot by region. Does anything stand out when you facet the plots?
+```{r}
+alg_proficiency <- districts.1 %>% 
+  group_by(system_name) %>%
+  ggplot(aes(x=alg_1, y=alg_2, ))+
+  geom_point()
+```
+
+
+```{r}
+alg_proficiency
+```
 
 10. Create a bar chart showing the total enrollment by region. Which region has the highest total enrollment? Which has the smallest?
 
